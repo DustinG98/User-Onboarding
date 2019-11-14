@@ -110,7 +110,7 @@ const FormikUserForm = withFormik({
             .min(6, "Password must be 6 characters")
             .required("Password is required"),
         /*TOS Errors*/
-        tos: Yup.bool() 
+        tos: Yup.boolean() 
             .oneOf([true], "Must Accept Terms and Conditions")
     }),
 
@@ -118,7 +118,7 @@ const FormikUserForm = withFormik({
         axios
             .post("https://reqres.in/api/users", values)
             .then(res => {
-                setStatus(res.data)//passes data into status
+                setStatus(res.data)//passes data into status state
                 resetForm();//resets form after submitting
                 setSubmitting(false);
             })
