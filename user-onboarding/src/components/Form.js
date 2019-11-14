@@ -13,10 +13,8 @@ const UserForm = ({ values, errors, touched, status }) => {
       //user state
     const [users, addUser] = useState([]);
 
-    //add user function
-
-
     useEffect(() => {
+        //add user function
         const addNewUser = (user) => {
             const newUser = {
             id: user.id,
@@ -36,20 +34,20 @@ const UserForm = ({ values, errors, touched, status }) => {
         <div>
             <Form>
                 <div>
-                    {touched.name && errors.name && <p>{errors.name}</p>}
+                    {touched.name && errors.name && <p>{errors.name}</p>/*Name Errors*/}
                     <Field type="text" name="name" placeholder="Name"/>
                 </div>
                 <div>
-                    {touched.email && errors.email && <p>{errors.email}</p>}
+                    {touched.email && errors.email && <p>{errors.email}</p>/*Email Errors*/}
                     <Field type="email" name="email" placeholder="Email Address"/>
                 </div>
                 <div>
-                    {touched.password && errors.password && <p>{errors.password}</p>}
+                    {touched.password && errors.password && <p>{errors.password}</p>/*Password Errors*/}
                     <Field type="password" name="password" placeholder="Password"/>
                 </div>
                 <div>
                     <label>
-                        {touched.tos && errors.tos && <p>{errors.tos}</p>}
+                        {touched.tos && errors.tos && <p>{errors.tos}</p>/*TOS Errors*/}
                         <Field type="checkbox" name="tos" checked={values.tos}/>
                         Accept TOS
                     </label>
@@ -57,6 +55,7 @@ const UserForm = ({ values, errors, touched, status }) => {
                 <button>Submit!</button>
             </Form>
             <div>
+                {/*Passing users to the Users component to be rendered.*/}
                 <Users users={users}/>
             </div>
         </div>
@@ -64,40 +63,43 @@ const UserForm = ({ values, errors, touched, status }) => {
 }
 
 const FormikUserForm = withFormik({
+    //taking props from form and turning them into values
     mapPropsToValues({ name, email, password, tos }) {
         return {
-            name: name || "",
+            name: name || "", //if the name is set it will be the name, otherwise it will be an empty string
             email: email || "",
             password: password || "",
-            tos: tos || false
+            tos: tos || false //if the tos is checked it will be true, else it will be false.
         }  
     },
     validationSchema: Yup.object().shape({
-        name: Yup.string()
-            .min(2, "Name must be at least 2 characters long")
+        /*Name Errors*/
+        name: Yup.string() 
+            .min(2, "Name must be at least 2 characters long") 
             .required("Name is required"),
+        /*Email Errors*/
         email: Yup.string()
             .email("Email not valid")
             .required("Email is required"),
+        /*Password Errors*/
         password: Yup.string()
             .min(6, "Password must be 6 characters or longer")
             .required("Password is required"),
-        tos: Yup.bool()
+        /*TOS Errors*/
+        tos: Yup.bool() 
             .oneOf([true], "Must Accept Terms and Conditions")
     }),
 
-    handleSubmit(values, { props, resetForm, setStatus, setSubmitting }) {
-        console.log(props)
+    handleSubmit(values, { resetForm, setStatus, setSubmitting }) {
         axios
             .post("https://reqres.in/api/users", values)
             .then(res => {
-                console.log(res);
-                setStatus(res.data)
-                resetForm();
+                setStatus(res.data)//passes data into status
+                resetForm();//resets form after submitting
                 setSubmitting(false);
             })
             .catch(err => {
-                console.log(err);
+                console.log(err)
                 setSubmitting(false);
             })
     }
