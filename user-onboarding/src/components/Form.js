@@ -58,12 +58,13 @@ const FormikUserForm = withFormik({
             .oneOf([true], "Must Accept Terms and Conditions")
     }),
 
-    handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
-        console.log(values)
+    handleSubmit(values, { props, resetForm, setErrors, setSubmitting }) {
+        console.log(props)
         axios
             .post("https://reqres.in/api/users", values)
             .then(res => {
                 console.log(res);
+                props.addNewUser(res.data)
                 resetForm();
                 setSubmitting(false);
             })
