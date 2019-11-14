@@ -3,13 +3,36 @@ import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from 'axios'
 import Users from './Users'
-//name
-//email
-//password
-//TOS(checkbox)
-//Submit BTN
+import { TextField } from 'formik-material-ui';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles({
+    card: {
+      minWidth: 600,
+      maxWidth: "50%",
+      padding: 25,
+    },
+    input: {
+        marginBottom: 20,
+        minWidth: "100%",
+    },
+    title: {
+        marginBottom: 20,
+        textDecoration: "underline",
+    },
+    error: {
+        color: "red",
+    },
+    users: {
+        margin: 20,
+    }
+  });
+
 
 const UserForm = ({ values, errors, touched, status }) => {
+    const classes = useStyles();
       //user state
     const [users, addUser] = useState([]);
 
@@ -31,30 +54,31 @@ const UserForm = ({ values, errors, touched, status }) => {
     }, [status, users])
 
     return (
-        <div>
+        <div className="form">
+        <Card className={classes.card}>
+            <Typography className={classes.title} variant="h5" component="h1">Create User</Typography>
             <Form>
-                <div>
-                    {touched.name && errors.name && <p>{errors.name}</p>/*Name Errors*/}
-                    <Field type="text" name="name" placeholder="Name"/>
+                <div className={classes.input}>
+                    <Field type="text" name="name" placeholder="Name" component={TextField}/>
                 </div>
-                <div>
-                    {touched.email && errors.email && <p>{errors.email}</p>/*Email Errors*/}
-                    <Field type="email" name="email" placeholder="Email Address"/>
+                <div className={classes.input}>
+                    <Field type="email" name="email" placeholder="Email Address" component={TextField}/>
                 </div>
-                <div>
-                    {touched.password && errors.password && <p>{errors.password}</p>/*Password Errors*/}
-                    <Field type="password" name="password" placeholder="Password"/>
+                <div className={classes.input}>
+                    <Field type="password" name="password" placeholder="Password" component={TextField}/>
                 </div>
-                <div>
+                <div className={classes.input}>
+                    {touched.tos && errors.tos && <p className={classes.error}>{errors.tos}</p>}
                     <label>
-                        {touched.tos && errors.tos && <p>{errors.tos}</p>/*TOS Errors*/}
-                        <Field type="checkbox" name="tos" checked={values.tos}/>
+                        <Field type="checkbox" name="tos" checked={values.tos} />
                         Accept TOS
                     </label>
                 </div>
                 <button>Submit!</button>
+                
             </Form>
-            <div>
+        </Card>
+            <div className="users">
                 {/*Passing users to the Users component to be rendered.*/}
                 <Users users={users}/>
             </div>
@@ -69,7 +93,7 @@ const FormikUserForm = withFormik({
             name: name || "", //if the name is set it will be the name, otherwise it will be an empty string
             email: email || "",
             password: password || "",
-            tos: tos || false //if the tos is checked it will be true, else it will be false.
+            tos: tos || false, //if the tos is checked it will be true, else it will be false.
         }  
     },
     validationSchema: Yup.object().shape({
@@ -83,7 +107,7 @@ const FormikUserForm = withFormik({
             .required("Email is required"),
         /*Password Errors*/
         password: Yup.string()
-            .min(6, "Password must be 6 characters or longer")
+            .min(6, "Password must be 6 characters")
             .required("Password is required"),
         /*TOS Errors*/
         tos: Yup.bool() 

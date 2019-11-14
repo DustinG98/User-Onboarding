@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .App-logo {
@@ -19,4 +23,23 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+button{
+  background-color: rgb(97, 0, 0);
+  padding: 5px 15px;
+  border-radius: 10px;
+  font-size: 16px;
+  border: none;
+  color: white;
+}
+
+.users{
+  display: flex;
+}
+.form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
