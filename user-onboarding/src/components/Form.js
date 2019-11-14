@@ -1,37 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from 'axios'
+import Users from './Users'
 //name
 //email
 //password
 //TOS(checkbox)
 //Submit BTN
 
-const UserForm = ({ values, errors, touched }) => {
+const UserForm = ({ values, errors, touched, status }) => {
+      //user state
+    const [users, addUser] = useState([]);
+
+    //add user function
+
+
+    useEffect(() => {
+        const addNewUser = (user) => {
+            const newUser = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            tos: user.tos
+            }
+            addUser([...users, newUser] )
+        }
+        if(status) {
+            addNewUser(status)
+        }
+    }, [status, users])
+
     return (
-        <Form>
+        <div>
+            <Form>
+                <div>
+                    {touched.name && errors.name && <p>{errors.name}</p>}
+                    <Field type="text" name="name" placeholder="Name"/>
+                </div>
+                <div>
+                    {touched.email && errors.email && <p>{errors.email}</p>}
+                    <Field type="email" name="email" placeholder="Email Address"/>
+                </div>
+                <div>
+                    {touched.password && errors.password && <p>{errors.password}</p>}
+                    <Field type="password" name="password" placeholder="Password"/>
+                </div>
+                <div>
+                    <label>
+                        {touched.tos && errors.tos && <p>{errors.tos}</p>}
+                        <Field type="checkbox" name="tos" checked={values.tos}/>
+                        Accept TOS
+                    </label>
+                </div>
+                <button>Submit!</button>
+            </Form>
             <div>
-                {touched.name && errors.name && <p>{errors.name}</p>}
-                <Field type="text" name="name" placeholder="Name"/>
+                <Users users={users}/>
             </div>
-            <div>
-                {touched.email && errors.email && <p>{errors.email}</p>}
-                <Field type="email" name="email" placeholder="Email Address"/>
-            </div>
-            <div>
-                {touched.password && errors.password && <p>{errors.password}</p>}
-                <Field type="password" name="password" placeholder="Password"/>
-            </div>
-            <div>
-                <label>
-                    {touched.tos && errors.tos && <p>{errors.tos}</p>}
-                    <Field type="checkbox" name="tos" checked={values.tos}/>
-                    Accept TOS
-                </label>
-            </div>
-            <button>Submit!</button>
-        </Form>
+        </div>
     )
 }
 
@@ -58,13 +86,13 @@ const FormikUserForm = withFormik({
             .oneOf([true], "Must Accept Terms and Conditions")
     }),
 
-    handleSubmit(values, { props, resetForm, setErrors, setSubmitting }) {
+    handleSubmit(values, { props, resetForm, setStatus, setSubmitting }) {
         console.log(props)
         axios
             .post("https://reqres.in/api/users", values)
             .then(res => {
                 console.log(res);
-                props.addNewUser(res.data)
+                setStatus(res.data)
                 resetForm();
                 setSubmitting(false);
             })

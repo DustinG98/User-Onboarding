@@ -5,9 +5,9 @@ const Users = (props) => {
         <div>
             {props.users.map(user => {
                 return <div key={user.id}>
-                    <h1>{user.name}</h1>
-                    <h4>{user.email}</h4>
-                    <p>{user.password}</p>
+                    <h1>Name: {user.name}</h1>
+                    <h4>Email: {user.email}</h4>
+                    <p>Password: {user.password}</p>
                 </div>
             })}
         </div>
