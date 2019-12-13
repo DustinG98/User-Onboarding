@@ -21,12 +21,18 @@ const useStyles = makeStyles({
     title: {
         marginBottom: 20,
         textDecoration: "underline",
+        fontWeight: 700,
     },
     error: {
         color: "red",
     },
     users: {
         margin: 20,
+    },
+    checkbox: {
+        width: 15,
+        height: 15,
+        marginTop: 10,
     }
   });
 
@@ -76,7 +82,8 @@ const UserForm = ({ values, errors, touched, status }) => {
                 <div className={classes.input}>
                     {touched.tos && errors.tos && <p className={classes.error}>{errors.tos}</p>}
                     <label>
-                        <Field type="checkbox" name="tos" checked={values.tos} />
+                        <Field type="checkbox" className={classes.checkbox} name="tos" checked={values.tos} />
+                    
                         Accept TOS
                     </label>
                 </div>
