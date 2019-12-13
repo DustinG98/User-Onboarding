@@ -26,11 +26,13 @@ const useStyles = makeStyles({
 
 const Users = (props) => {
     const classes = useStyles();
+    const {users, deleteUser} = props;
     return (
         <div>
-            {props.users.map(user => {
+            {users.map(user => {
                 return <Card key={user.id} className={classes.card}>
                             <CardContent>
+                                <button onClick={() => deleteUser(user.id)}>Delete</button>
                                 <Typography variant="h4" component="h1">Name: {user.name}</Typography>
                                 <Typography variant="h6" component="h4">Email: {user.email}</Typography>
                                 <Typography variant="subtitle1" component="p">Password: {user.password}</Typography>
