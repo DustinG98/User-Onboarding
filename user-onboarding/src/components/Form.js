@@ -20,7 +20,7 @@ const useStyles = makeStyles({
     },
     title: {
         marginBottom: 20,
-        textDecoration: "underline",
+        color: '#001763',
         fontWeight: 700,
     },
     error: {
