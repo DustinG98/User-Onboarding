@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 const UserForm = ({ values, errors, touched, status }) => {
     const classes = useStyles();
       //user state
-    const [users, addUser] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         //add user function
@@ -46,12 +46,18 @@ const UserForm = ({ values, errors, touched, status }) => {
             password: user.password,
             tos: user.tos
             }
-            addUser([...users, newUser] )
+            setUsers([...users, newUser] )
         }
         if(status) {
             addNewUser(status)
         }
     }, [status, users])
+
+    //delete user function
+    const deleteUser = (id) => {
+        let newUsers = users.filter(user => user.id !== id);
+        setUsers(newUsers)
+    }
 
     return (
         <div className="form">
@@ -74,13 +80,13 @@ const UserForm = ({ values, errors, touched, status }) => {
                         Accept TOS
                     </label>
                 </div>
-                <button>Submit!</button>
+                <button type="submit">Submit!</button>
                 
             </Form>
         </Card>
             <div className="users">
                 {/*Passing users to the Users component to be rendered.*/}
-                <Users users={users}/>
+                <Users users={users} deleteUser={deleteUser}/>
             </div>
         </div>
     )
